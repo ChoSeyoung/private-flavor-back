@@ -1,3 +1,65 @@
+# set profile section
+spring:
+  profiles:
+    group:
+      local:
+        - common
+        - local
+      development:
+        - common
+        - development
+      production:
+        - common
+        - production
+---
+# set common setting section
+spring:
+  config:
+    activate:
+      on-profile: common
+
+---
+# set local setting section
+spring:
+  devtools:
+    livereload:
+      enabled: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    url: jdbc:mysql://localhost:3306/private_flavor
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+---
+# set development setting section
+spring:
+  devtools:
+    livereload:
+      enabled: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    url: jdbc:mysql://localhost:3306/private_flavor
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+---
+# set production setting section
 spring:
   devtools:
     livereload:

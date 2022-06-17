@@ -23,18 +23,18 @@ ext {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-batch'
-    implementation 'mysql:mysql-connector-java'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.azure.spring:spring-cloud-azure-starter-storage-blob'
+    implementation 'org.springframework.boot:spring-boot-starter-batch:2.7.0'
+    implementation 'mysql:mysql-connector-java:8.0.29'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.0'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.7.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.0'
+    implementation 'com.azure.spring:spring-cloud-azure-starter-storage-blob:4.2.0'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.batch:spring-batch-test'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.7.0'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.0'
+    testImplementation 'org.springframework.batch:spring-batch-test:4.3.6'
 }
 
 dependencyManagement {
@@ -45,4 +45,51 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+def reactDir = "$projectDir/src/main/webapp";
+
+sourceSets{
+    main{
+        resources{
+            srcDirs = ["$projectDir/src/main/resources"]
+        }
+    }
+}
+
+processResources{
+    dependsOn "copyReactBuildFiles"
+}
+
+task installReact(type:Exec){
+    workingDir "$reactDir"
+    inputs.dir "$reactDir"
+    group = BasePlugin.BUILD_GROUP
+
+    if(System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')){
+        commandLine "npm.cmd", "audit", "fix"
+        commandLine 'npm.cmd', 'install'
+    }else{
+        commandLine "npm", "audit", "fix"
+        commandLine 'npm', 'install'
+    }
+}
+
+task buildReact(type:Exec){
+    dependsOn "installReact"
+    workingDir "$reactDir"
+    inputs.dir "$reactDir"
+    group = BasePlugin.BUILD_GROUP
+
+    if(System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')){
+        commandLine "npm.cmd", "run-script", "build"
+    }else{
+        commandLine "npm", "run-script", "build"
+    }
+}
+
+task copyReactBuildFiles(type:Copy){
+    dependsOn "buildReact"
+    from "$reactDir/build"
+    into "$projectDir/src/main/resources/static"
 }
