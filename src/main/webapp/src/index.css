@@ -7,7 +7,26 @@ html {
     padding: 0;
 }
 
-.header {
-    height: 3rem;
-    background-color: #777;
+.row-top {
+    height: 3.5rem;
+}
+
+.sidebar-parent {
+    font-weight: bold;
+}
+
+.sidebar-child {
+    margin-left: 0.5rem;
+    padding: 0.5rem 0 0.5rem 0.5rem;
+    color: rgba(0, 0, 0, 0.5);
+    border-left: 1px dashed black;
+}
+
+.sidebar-child.selected {
+    font-weight: bold;
+    color: black;
+}
+
+.sidebar-child:hover {
+    color: rgba(0, 0, 0, 0.75);
 }
