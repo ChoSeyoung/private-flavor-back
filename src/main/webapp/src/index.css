@@ -13,6 +13,7 @@ html {
 
 .sidebar-parent {
     font-weight: bold;
+    cursor: pointer;
 }
 
 .sidebar-child {
@@ -20,6 +21,7 @@ html {
     padding: 0.5rem 0 0.5rem 0.5rem;
     color: rgba(0, 0, 0, 0.5);
     border-left: 1px dashed black;
+    cursor: pointer;
 }
 
 .sidebar-child.selected {
